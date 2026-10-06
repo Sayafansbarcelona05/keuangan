@@ -1,0 +1,37 @@
+load(
+    "//anybuild/tools:laravel.bzl",
+    "laravel_build",
+    "laravel_config",
+    "laravel_serve",
+)
+
+config = laravel_config(
+    schema = 1,
+
+    # PHP
+    php_framework = "laravel",
+    php_version = "8.3.29",
+    php_public_dir = "public",
+
+    # Composer
+    composer_enable = True,
+    composer_build_script = "post-update-cmd",
+
+    # Vite / Node
+    node_package_manager = "npm",
+    node_version = "24",
+    node_build_command = "npm run build",
+
+    # Jangan jalankan migration otomatis dari deployment.
+    commands = {
+        "start": "php -S 0.0.0.0:8080 -t public",
+    },
+)
+
+build = laravel_build(config)
+
+laravel_serve(
+    config,
+    build,
+    name = "keuangan",
+)
